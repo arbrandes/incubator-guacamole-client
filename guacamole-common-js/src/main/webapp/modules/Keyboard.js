@@ -36,6 +36,13 @@ Guacamole.Keyboard = function(element) {
     var guac_keyboard = this;
 
     /**
+     * Whether to prevent keypress event defaults.
+     *
+     * @boolean
+     */
+    this.preventDefaults = true;
+
+    /**
      * Fired whenever the user presses a key with the element associated
      * with this Guacamole.Keyboard in focus.
      * 
@@ -1059,7 +1066,7 @@ Guacamole.Keyboard = function(element) {
         eventLog.push(keydownEvent);
 
         // Interpret as many events as possible, prevent default if indicated
-        if (interpret_events())
+        if (interpret_events() && guac_keyboard.preventDefaults)
             e.preventDefault();
 
     }, true);
@@ -1082,7 +1089,7 @@ Guacamole.Keyboard = function(element) {
         eventLog.push(keypressEvent);
 
         // Interpret as many events as possible, prevent default if indicated
-        if (interpret_events())
+        if (interpret_events() && guac_keyboard.preventDefaults)
             e.preventDefault();
 
     }, true);
@@ -1093,7 +1100,9 @@ Guacamole.Keyboard = function(element) {
         // Only intercept if handler set
         if (!guac_keyboard.onkeyup) return;
 
-        e.preventDefault();
+        if (guac_keyboard.preventDefaults) {
+            e.preventDefault();
+        }
 
         var keyCode;
         if (window.event) keyCode = window.event.keyCode;
